@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Bairro Sem Golpes — simulador educativo de segurança digital." />
+    <title>Bairro Sem Golpes</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#inicio" aria-label="Bairro Sem Golpes — início">
+          <span class="brand-mark" aria-hidden="true">!</span>
+          <span>Bairro Sem Golpes</span>
+        </a>
+        <nav aria-label="Navegação principal">
+          <a href="#simulador">Simulador</a>
+          <a href="#fontes">Fontes</a>
+          <a href="#sobre">Sobre</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="inicio">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Protótipo educativo</p>
+            <h1>Antes de clicar, pare e confira.</h1>
+            <p class="hero-text">
+              Um simulador para praticar decisões seguras diante de situações fictícias
+              envolvendo WhatsApp e Pix.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#simulador">Conhecer o simulador</a>
+              <a class="button button-secondary" href="#sobre">Entender o projeto</a>
+            </div>
+          </div>
+          <aside class="notice" aria-label="Aviso de privacidade">
+            <strong>Privacidade desde o início</strong>
+            <p>
+              Esta primeira versão não pede cadastro, telefone, CPF, localização ou
+              mensagens reais. Os resultados ficam somente nesta sessão do navegador.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      <section id="simulador" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Etapa 1 — estrutura</p>
+            <h2>Como o simulador será organizado</h2>
+            <p>
+              Os conteúdos abaixo são pontos de partida para construção e revisão guiadas.
+              Nenhuma situação real de morador é presumida nesta etapa.
+            </p>
+          </div>
+
+          <div class="progress-shell" aria-label="Progresso do simulador">
+            <div class="progress-label">
+              <span id="progress-text">Estrutura inicial</span>
+              <span id="progress-count">0 de 5 situações</span>
+            </div>
+            <div class="progress-track">
+              <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="simulator-layout">
+            <div id="scenario-list" class="scenario-list" aria-label="Situações do simulador"></div>
+
+            <article class="scenario-card" aria-live="polite">
+              <div class="scenario-kicker" id="scenario-kicker">Situação 1</div>
+              <h3 id="scenario-title">Selecione uma situação</h3>
+              <p id="scenario-prompt">
+                Escolha uma das cinco situações para ver o espaço reservado ao enunciado,
+                às alternativas e ao feedback educativo.
+              </p>
+              <div id="scenario-options" class="option-list"></div>
+              <div id="scenario-feedback" class="feedback" hidden></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="fontes" class="section section-muted">
+        <div class="container two-column">
+          <div>
+            <p class="eyebrow">Referências</p>
+            <h2>Fontes oficiais entrarão aqui</h2>
+            <p>
+              Cada orientação do simulador deverá ser ligada a uma fonte pública verificável
+              e revisada antes da publicação.
+            </p>
+          </div>
+          <ul class="source-list">
+            <li><a href="https://www.bcb.gov.br/golpes" target="_blank" rel="noreferrer">Banco Central — golpes</a></li>
+            <li><a href="https://bcb.gov.br/estabilidadefinanceira/pix-seguranca" target="_blank" rel="noreferrer">Banco Central — segurança no Pix</a></li>
+            <li><a href="https://www.gov.br/cisc/pt-br/alertas-de-golpes-digitais" target="_blank" rel="noreferrer">CISC — alertas de golpes digitais</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="sobre" class="section">
+        <div class="container two-column">
+          <div>
+            <p class="eyebrow">Limites atuais</p>
+            <h2>O que ainda precisa ser validado</h2>
+          </div>
+          <ul class="check-list">
+            <li>Necessidade percebida por uma comunidade ou parceiro real.</li>
+            <li>Linguagem e situações adequadas ao público escolhido.</li>
+            <li>Instrumento de teste antes/depois e forma ética de aplicação.</li>
+            <li>Resultados reais, sem fabricar participantes ou impacto.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>Protótipo acadêmico em construção guiada. Não substitui orientação do banco ou de autoridades.</p>
+      </div>
+    </footer>
+  </body>
+</html>
