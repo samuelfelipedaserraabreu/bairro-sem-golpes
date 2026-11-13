@@ -1,99 +1,20 @@
 const scenarios = [
-  {
-    title: 'Troquei de número',
-    prompt: 'Espaço reservado para uma mensagem fictícia em que alguém conhecido pede uma transferência urgente.',
-  },
-  {
-    title: 'Falsa central ou banco',
-    prompt: 'Espaço reservado para uma situação fictícia envolvendo pedido de código, senha ou acesso ao dispositivo.',
-  },
-  {
-    title: 'Falso órgão público',
-    prompt: 'Espaço reservado para uma mensagem fictícia com identidade visual, link e cobrança urgente.',
-  },
-  {
-    title: 'Comprovante ou Pix enviado por engano',
-    prompt: 'Espaço reservado para uma situação fictícia em que a pessoa pede devolução antes da conferência.',
-  },
-  {
-    title: 'QR Code ou chave Pix divergente',
-    prompt: 'Espaço reservado para praticar a conferência do destinatário antes da confirmação.',
-  },
+ {title:'Familiar pedindo Pix',prompt:'Mensagem fictícia: “Oi, troquei de número. Estou com urgência: faça um Pix para esta conta, por favor.”',options:['Fazer o Pix imediatamente.','Ligar para a pessoa em um número que eu já conheço antes de agir.','Pedir a chave Pix e transferir sem confirmar.'],safe:1,explanation:'Confirme a identidade por um número ou canal que você já conhece. Foto e urgência não provam quem enviou a mensagem. Não faça uma transferência apenas porque o contato pediu.'},
+ {title:'Falsa central bancária',prompt:'Mensagem fictícia: “Somos do seu banco. Há uma operação suspeita. Envie seu código de acesso ou faça um Pix para uma conta segura.”',options:['Enviar o código para resolver logo.','Fazer o Pix para a conta indicada.','Não enviar códigos nem dinheiro; contatar o banco por um canal oficial que eu mesmo procurei.'],safe:2,explanation:'Encerre o contato suspeito e procure o banco por um canal oficial independente. Não forneça senhas ou códigos, não clique em links recebidos e não faça Pix para uma suposta conta segura.'},
+ {title:'Pix enviado por engano',prompt:'Mensagem fictícia: “Fiz um Pix por engano para você. Devolva agora para esta outra chave.” A pessoa envia um comprovante.',options:['Conferir o extrato no aplicativo do banco e, se o Pix existir, usar a função de devolução da transação ou pedir orientação ao banco.','Acreditar no comprovante e transferir para a outra chave.','Devolver para qualquer conta indicada, sem conferir o extrato.'],safe:0,explanation:'Confira o recebimento no extrato, pois comprovantes podem ser falsos. Se for devolver, use a função de devolução vinculada à transação no aplicativo do banco; não faça um novo Pix para outra conta. Em caso de dúvida, contate o banco.'}
 ];
-
-const list = document.querySelector('#scenario-list');
-const kicker = document.querySelector('#scenario-kicker');
-const title = document.querySelector('#scenario-title');
-const prompt = document.querySelector('#scenario-prompt');
-const options = document.querySelector('#scenario-options');
-const feedback = document.querySelector('#scenario-feedback');
-const progressText = document.querySelector('#progress-text');
-const progressCount = document.querySelector('#progress-count');
-const progressBar = document.querySelector('#progress-bar');
-
-let selectedIndex = -1;
-
-function renderScenarioList() {
-  list.innerHTML = scenarios
-    .map(function (scenario, index) {
-      return [
-        '<button class="scenario-button" type="button" data-index="',
-        index,
-        '" aria-current="',
-        index === selectedIndex,
-        '"><span>Situação ',
-        index + 1,
-        '</span><br />',
-        scenario.title,
-        '</button>',
-      ].join('');
-    })
-    .join('');
-
-  list.querySelectorAll('[data-index]').forEach(function (button) {
-    button.addEventListener('click', function () {
-      selectScenario(Number(button.dataset.index));
-    });
-  });
+const list=document.querySelector('#scenario-list'), kicker=document.querySelector('#scenario-kicker'), title=document.querySelector('#scenario-title'), prompt=document.querySelector('#scenario-prompt'), options=document.querySelector('#scenario-options'), feedback=document.querySelector('#scenario-feedback'), next=document.querySelector('#next'), finish=document.querySelector('#finish');
+let index=0, answers=[];
+function render(){
+ const s=scenarios[index]; kicker.textContent='Situação '+(index+1)+' de 3';title.textContent=s.title;prompt.textContent=s.prompt;feedback.hidden=true;next.hidden=true;
+ list.replaceChildren();scenarios.forEach((item,i)=>{const el=document.createElement('div');el.className='scenario-button';el.textContent=(i+1)+'. '+item.title+(i<answers.length?' ✓':'');if(i===index)el.setAttribute('aria-current','true');list.append(el)});
+ options.replaceChildren();s.options.forEach((option,i)=>{const button=document.createElement('button');button.type='button';button.className='option-button';button.textContent=option;button.addEventListener('click',()=>choose(i));options.append(button)});
+ document.querySelector('#progress-count').textContent=answers.length+' de 3 concluídas';document.querySelector('#progress-bar').style.width=(answers.length/3*100)+'%';
 }
-
-function selectScenario(index) {
-  selectedIndex = index;
-  const scenario = scenarios[index];
-
-  kicker.textContent = 'Situação ' + (index + 1);
-  title.textContent = scenario.title;
-  prompt.textContent = scenario.prompt;
-  options.innerHTML = [
-    '<button class="option-button" type="button" data-feedback="safe">Eu pararia e confirmaria por outro canal.</button>',
-    '<button class="option-button" type="button" data-feedback="review">Eu ainda precisaria analisar melhor antes de agir.</button>',
-    '<button class="option-button" type="button" data-feedback="unknown">Não sei qual seria a atitude mais segura.</button>',
-  ].join('');
-
-  feedback.hidden = true;
-  feedback.textContent = '';
-
-  options.querySelectorAll('[data-feedback]').forEach(function (button) {
-    button.addEventListener('click', function () {
-      showFeedback(button.dataset.feedback);
-    });
-  });
-
-  progressText.textContent = 'Situação selecionada';
-  progressCount.textContent = (index + 1) + ' de ' + scenarios.length + ' situações';
-  progressBar.style.width = (((index + 1) / scenarios.length) * 100) + '%';
-  renderScenarioList();
-}
-
-function showFeedback(type) {
-  const messages = {
-    safe: 'Feedback inicial: confirmar por um canal independente é uma hipótese de resposta segura. O motivo e os sinais concretos desta situação ainda serão construídos e revisados.',
-    review: 'Feedback inicial: antes de concluir, procure sinais observáveis e uma forma segura de conferir. Esta explicação será aprofundada na próxima etapa.',
-    unknown: 'Tudo bem marcar incerteza. O objetivo do simulador será transformar essa dúvida em um procedimento verificável, sem expor dados pessoais.',
-  };
-
-  feedback.hidden = false;
-  feedback.textContent = messages[type];
-}
-
-renderScenarioList();
+function choose(i){const s=scenarios[index];answers.push(i===s.safe);options.querySelectorAll('button').forEach(b=>b.disabled=true);feedback.textContent=(i===s.safe?'Boa escolha. ':'Atenção: há uma opção mais segura. ')+s.explanation;feedback.hidden=false;next.textContent=index===2?'Concluir atividade':'Próxima situação';next.hidden=false;document.querySelector('#progress-count').textContent=answers.length+' de 3 concluídas';document.querySelector('#progress-bar').style.width=(answers.length/3*100)+'%';}
+next.addEventListener('click',()=>{if(index<2){index++;render();title.focus()}else{next.hidden=true;finish.hidden=false;finish.scrollIntoView({behavior:'smooth'});}});
+function summary(){const value=document.querySelector('#testimonial').value.trim();const consent=document.querySelector('#consent').checked;return 'Bairro Sem Golpes — concluí as três situações educativas.\nRespostas mais seguras: '+answers.filter(Boolean).length+' de 3.\n'+(value&&consent?'Depoimento autorizado para uso acadêmico, sem identificação: '+value:'Depoimento não incluído.')+'\nRegistro compartilhado voluntariamente pelo participante.'}
+function fallback(message){const box=document.querySelector('#manual-copy');box.hidden=false;box.value=summary();box.focus();box.select();document.querySelector('#share-status').textContent=message}
+document.querySelector('#copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(summary());document.querySelector('#share-status').textContent='Resumo copiado. Envie ao responsável pela atividade.'}catch(e){fallback('Selecione e copie o resumo abaixo para enviar ao responsável.')}});
+document.querySelector('#share').addEventListener('click',async()=>{if(!navigator.share){fallback('Compartilhamento indisponível. Copie o resumo abaixo e envie ao responsável.');return}try{await navigator.share({text:summary()});document.querySelector('#share-status').textContent='Confirme se enviou o resumo ao responsável.'}catch(e){if(e.name!=='AbortError')fallback('Não foi possível compartilhar. Copie o resumo abaixo e envie ao responsável.')}});
+render();

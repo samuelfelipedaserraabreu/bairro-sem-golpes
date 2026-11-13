@@ -202,3 +202,5 @@ h3 { font-size: clamp(1.35rem, 3vw, 2rem); }
   nav { gap: 0.75rem; }
   .hero { padding-top: 3.5rem; }
 }
+
+[hidden]{display:none!important} .option-button:disabled{cursor:default;opacity:.75} textarea{width:100%;min-height:7rem;padding:.8rem;font:inherit;border:1px solid var(--line);border-radius:.6rem} .actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem} .result-note{color:var(--muted)} button.button{cursor:pointer;font:inherit} label{display:block;margin:1rem 0}
